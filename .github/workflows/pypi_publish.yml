@@ -51,6 +51,11 @@ jobs:
 
       - uses: pdm-project/setup-pdm@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.x'
+
       - name: Publish package distributions to PyPI
         run: pdm publish || true
 
