@@ -1,1 +1,1 @@
-print("hello pyrunjs")
+print("hello pyrunjs, test publish")
