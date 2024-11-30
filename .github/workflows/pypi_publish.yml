@@ -15,10 +15,31 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # 运行单元测试的 Job
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.x'
+
+      - name: Install dependencies
+        run: pdm install  # 使用 PDM 安装依赖
+
+      - name: Run unit tests
+        run: pdm run -v pytest tests
+
   # This workflow contains a single job called "build"
   pypi-publish:
     name: upload release to PyPI
     runs-on: ubuntu-latest
+    needs: test
     permissions:
       # 这个权限是为了私有仓库。
       contents: read

@@ -1,6 +1,6 @@
 [project]
 name = "pyrunjs"
-version = "0.1.1"
+version = "0.1.2"
 description = "Default template for PDM package"
 authors = [
     { name = "JoCarey1", email = "JoCarey@foxmail.com" },
@@ -11,3 +11,7 @@ readme = "README.md"
 license = { text = "MIT" }
 
 [tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=8.3.3",
+]

@@ -1,1 +1,1 @@
-print("hello pyrunjs, test publish")
+from .runner import *
