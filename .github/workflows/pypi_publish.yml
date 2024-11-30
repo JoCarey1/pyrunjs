@@ -32,3 +32,16 @@ jobs:
 
       - name: Publish package distributions to PyPI
         run: pdm publish
+
+      - name: Extract version from pyproject.toml
+        id: extract_version
+        run: |
+          python -c "
+          import tomli
+          with open('pyproject.toml', 'rb') as f:
+              print(tomli.load(f)['project']['version'])
+          " > version.txt
+      - name: Read version
+        run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
+      - name: Verify PyPI upload
+        run: pip install pyrunjs==$VERSION
