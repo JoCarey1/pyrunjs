@@ -54,13 +54,18 @@ jobs:
       - name: Publish package distributions to PyPI
         run: pdm publish || true
 
+      - name: pip install toml
+        run: pip install toml
+
       - name: Extract version from pyproject.toml
         id: extract_version
         run: |
           python -c "
-          import tomli
-          with open('pyproject.toml', 'rb') as f:
-              print(tomli.load(f)['project']['version'])
+          from pathlib import Path
+          import textwrap
+          import toml
+          d = toml.loads(Path('pyproject.toml').read_text(encoding='utf-8'))
+          print(d['project']['version'])
           " > version.txt
       - name: Read version
         run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
