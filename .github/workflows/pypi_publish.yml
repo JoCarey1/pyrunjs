@@ -24,6 +24,7 @@ jobs:
       contents: read
       # 重要提示：这个权限对于可信发布是必需的。
       id-token: write
+    environment: pypi_publish  # 与 PyPI 上的环境名称一致
     steps:
       - uses: actions/checkout@v4
 
