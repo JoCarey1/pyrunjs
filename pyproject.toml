@@ -9,7 +9,6 @@ dependencies = []
 requires-python = ">=3.12"
 readme = "README.md"
 license = { text = "MIT" }
-homepage = "https://github.com/JoCarey1/pyrunjs"
 
 [tool.pdm]
 [tool.pdm.dev-dependencies]
