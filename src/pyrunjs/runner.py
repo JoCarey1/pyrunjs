@@ -74,7 +74,7 @@ def run_js_with_result(js_script: str, expression: str):
     ok = p.wait() == 0
     result = RunResult(ok)
     if ok:
-        g = _RETURN_MSG_PATTERN.search(out.decode('utf-8'))
+        g = _RETURN_MSG_PATTERN.search(out.decode('ascii'))
         result.js_type = g.group(1)
         result.output = base64.b64decode(g.group(2)).decode('utf-8')
     else:
