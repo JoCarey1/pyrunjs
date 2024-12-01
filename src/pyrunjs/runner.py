@@ -1,3 +1,4 @@
+import json
 import subprocess
 import re
 
@@ -10,6 +11,28 @@ class RunResult:
         self.js_type = js_type
         self.output = output
         self.error = error
+
+
+def call_js(js_script: str, call_func_name: str, call_func_params=None):
+    if not isinstance(call_func_name, str):
+        raise RuntimeError(f"call_func_name must be a string")
+    _call_func_params_is_list_or_tuple = False
+    if not isinstance(call_func_params, (str, int, dict)):
+        if isinstance(call_func_params, (list, tuple)):
+            _call_func_params_is_list_or_tuple = True
+            for param in call_func_params:
+                if not isinstance(param, (str, int, dict)) and param is not None:
+                    raise RuntimeError(f"call_func_params every param must be (str, int, dict) or None")
+        elif call_func_params is not None:
+            raise RuntimeError(f"call_func_params must be (str, int, dict) or None")
+
+    if _call_func_params_is_list_or_tuple:
+        params = [json.dumps(param, ensure_ascii=False) for param in call_func_params]
+        expression = '{}({})'.format(call_func_name, ','.join(params))
+    else:
+        expression = '{}({})'.format(call_func_name, json.dumps(call_func_params, ensure_ascii=False))
+
+    return run_js(js_script, expression)
 
 
 def run_js(js_script: str, expression: str):
