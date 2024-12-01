@@ -1,6 +1,7 @@
 import json
 import subprocess
 import re
+import base64
 
 _RETURN_MSG_PATTERN = re.compile(r"##(.*)##(.*)##$")
 
@@ -50,17 +51,18 @@ def run_js(js_script: str, expression: str):
 def run_js_with_result(js_script: str, expression: str):
     if js_script is None or expression is None:
         raise ValueError('js_script and expression are required')
+    js_script = base64.b64encode(js_script.encode('utf-8')).decode('utf-8')
     js_code = f'''
         (function() {{
-            {js_script}
-            ;
-            (function(){{
+            eval(Buffer.from("{js_script}", "base64").toString("UTF-8"));
+            !(function(){{
                 let result = {expression};
                 let result_type = typeof result;
                 if (result_type !== 'string') {{
                     result = JSON.stringify(result);
                 }}
-                process.stdout.write(`##${{result_type}}##${{result}}##`);
+                let result_base64 = Buffer.from(result, "UTF-8").toString("base64");
+                process.stdout.write(`##${{result_type}}##${{result_base64}}##`);
             }})()
         }})()
     '''
@@ -68,13 +70,13 @@ def run_js_with_result(js_script: str, expression: str):
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    out, err = p.communicate(js_code.encode('utf-8'))
+    out, err = p.communicate(js_code.encode('ascii'))
     ok = p.wait() == 0
     result = RunResult(ok)
     if ok:
         g = _RETURN_MSG_PATTERN.search(out.decode('utf-8'))
         result.js_type = g.group(1)
-        result.output = g.group(2)
+        result.output = base64.b64decode(g.group(2)).decode('utf-8')
     else:
-        result.error = err.decode('utf-8')
+        result.error = err.decode()
     return result
