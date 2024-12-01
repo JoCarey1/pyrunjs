@@ -15,6 +15,12 @@ class RunResult:
 
 
 def call_js(js_script: str, call_func_name: str, call_func_params=None):
+    """
+    Call js_script with call_func_name and call_func_params
+    @param js_script: JS script
+    @param call_func_name: Call function name
+    @param call_func_params: Call function parameters
+    """
     if not isinstance(call_func_name, str):
         raise RuntimeError(f"call_func_name must be a string")
     _call_func_params_is_list_or_tuple = False
