@@ -1,7 +1,7 @@
 [project]
 name = "pyrunjs"
 version = "0.1.3"
-description = "Python run js"
+description = "Easily run javascript expressions using python."
 authors = [
     { name = "JoCarey1", email = "JoCarey@foxmail.com" },
 ]
