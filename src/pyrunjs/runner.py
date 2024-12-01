@@ -68,7 +68,8 @@ def run_js_with_result(js_script: str, expression: str):
                     result = JSON.stringify(result);
                 }}
                 let result_base64 = Buffer.from(result, "UTF-8").toString("base64");
-                process.stdout.write(`##${{result_type}}##${{result_base64}}##`);
+                let result_type_base64 = Buffer.from(result_type, "UTF-8").toString("base64");
+                process.stdout.write(`##${{result_type_base64}}##${{result_base64}}##`);
             }})()
         }})()
     '''
@@ -81,7 +82,7 @@ def run_js_with_result(js_script: str, expression: str):
     result = RunResult(ok)
     if ok:
         g = _RETURN_MSG_PATTERN.search(out.decode('ascii'))
-        result.js_type = g.group(1)
+        result.js_type = base64.b64decode(g.group(1)).decode('utf-8')
         result.output = base64.b64decode(g.group(2)).decode('utf-8')
     else:
         result.error = err.decode()
