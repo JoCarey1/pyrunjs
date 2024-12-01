@@ -2,7 +2,7 @@ import unittest
 import pyrunjs
 
 
-class TestRunnerMethods(unittest.TestCase):
+class TestRunJs(unittest.TestCase):
 
     def test_hello_world(self):
         js_script = """function HelloWorld() { return 'Hello World!'; } """
