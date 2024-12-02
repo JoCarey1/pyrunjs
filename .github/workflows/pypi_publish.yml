@@ -4,10 +4,7 @@ name: pypi_publish
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "dev" branch
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -21,8 +18,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11', '3.12', '3.13']
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        python-version: [ 3.8, 3.9, '3.10', '3.11', '3.12', '3.13' ]
+        os: [ ubuntu-latest, macOS-latest, windows-latest ]
 
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +27,7 @@ jobs:
         uses: pdm-project/setup-pdm@v4
         with:
           python-version: ${{ matrix.python-version }}
+          version: 2.15.3
 
       - name: Install dependencies
         run: |

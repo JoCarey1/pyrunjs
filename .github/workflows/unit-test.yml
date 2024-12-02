@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: pypi_publish
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # 运行单元测试的 Job
+  uni-test:
+    name: Run Unit Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: [ 3.8, 3.9, '3.10', '3.11', '3.12', '3.13' ]
+        os: [ ubuntu-latest, macOS-latest, windows-latest ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          version: 2.15.3
+
+      - name: Install dependencies
+        run: |
+          pdm sync -d -G testing
+      - name: Run Tests
+        run: |
+          pdm run -v pytest tests
