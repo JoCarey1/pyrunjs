@@ -43,6 +43,15 @@ class TestRunJsPromise(unittest.TestCase):
         """
         self.assertEqual("9", pyrunjs.run_js(js_script, "add(1, 2)"))
 
+    def test_async_function(self):
+        js_script = """
+            async function message() {
+                // await other_async()
+                return "你好世界, hello"
+            }
+        """
+        self.assertEqual("你好世界, hello", pyrunjs.run_js(js_script, "message()"))
+
 
 if __name__ == '__main__':
     unittest.main()
