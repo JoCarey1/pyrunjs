@@ -7,22 +7,22 @@ class TestCallJs(unittest.TestCase):
 
     def test_hello_world(self):
         js_script = """function HelloWorld() { return 'Hello World!'; } """
-        self.assertEqual(pyrunjs.call_js(js_script, "HelloWorld"), "Hello World!")
+        self.assertEqual("Hello World!", pyrunjs.call_js(js_script, "HelloWorld"))
 
     def test_string_param(self):
         js_script = """function add(a) { return a; } """
-        self.assertEqual(pyrunjs.call_js(js_script, "add", "my msg."), "my msg.")
+        self.assertEqual("my msg.", pyrunjs.call_js(js_script, "add", "my msg."))
 
     def test_int_param(self):
         js_script = """function add(a) { return 1 + a; } """
-        self.assertEqual(pyrunjs.call_js(js_script, "add", 9), "10")
+        self.assertEqual("10", pyrunjs.call_js(js_script, "add", 9))
 
     def test_list_and_tuple_params(self):
         js_script = """function add(a, b, c) { return a + b - c; } """
         list_params = [1, 2, 3]
-        self.assertEqual(pyrunjs.call_js(js_script, "add", list_params), "0")
+        self.assertEqual("0", pyrunjs.call_js(js_script, "add", list_params))
         tuple_params = (1, 2, 3)
-        self.assertEqual(pyrunjs.call_js(js_script, "add", tuple_params), "0")
+        self.assertEqual("0", pyrunjs.call_js(js_script, "add", tuple_params))
 
     def test_dict_param(self):
         js_script = """function get_msg(a) { return a.msg; } """
@@ -31,7 +31,7 @@ class TestCallJs(unittest.TestCase):
             "key2": "value2",
             "msg": "hi"
         }
-        self.assertEqual(pyrunjs.call_js(js_script, "get_msg", dict_params), "hi")
+        self.assertEqual("hi", pyrunjs.call_js(js_script, "get_msg", dict_params), "msg should be hi")
 
     def test_tuple_param_with_dict(self):
         js_script = """function makeJsObj(a, b, c, d) { 

@@ -42,14 +42,21 @@ def run_js_with_result(js_script: str, expression: str):
         (function() {{
             eval(Buffer.from("{js_script}", "base64").toString("UTF-8"));
             !(function(){{
-                let result = {expression};
-                let result_type = typeof result;
-                if (result_type !== 'string') {{
-                    result = JSON.stringify(result);
+                let _handle_result = function(result) {{
+                    let result_type = typeof result;
+                    if (result_type !== 'string') {{
+                        result = JSON.stringify(result);
+                    }}
+                    let result_base64 = Buffer.from(result, "UTF-8").toString("base64");
+                    let result_type_base64 = Buffer.from(result_type, "UTF-8").toString("base64");
+                    process.stdout.write(`##${{result_type_base64}}##${{result_base64}}##`);
                 }}
-                let result_base64 = Buffer.from(result, "UTF-8").toString("base64");
-                let result_type_base64 = Buffer.from(result_type, "UTF-8").toString("base64");
-                process.stdout.write(`##${{result_type_base64}}##${{result_base64}}##`);
+                let expression_result = {expression};
+                if (expression_result && typeof expression_result.then === 'function') {{
+                    expression_result.then(obj => {{_handle_result(obj)}});
+                }} else {{
+                    _handle_result(expression_result);
+                }}
             }})()
         }})()
     '''
@@ -66,6 +73,7 @@ def run_js_with_result(js_script: str, expression: str):
         result.output = base64.b64decode(g.group(2)).decode('utf-8')
     else:
         result.error = err.decode()
+        print(result.error)
     return result
 
 
