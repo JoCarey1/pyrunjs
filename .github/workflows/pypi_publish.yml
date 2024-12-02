@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # 运行单元测试的 Job
-  test:
+  uni-test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
 
@@ -39,7 +39,7 @@ jobs:
   pypi-publish:
     name: upload release to PyPI
     runs-on: ubuntu-latest
-    needs: test
+    needs: uni-test
     permissions:
       # 这个权限是为了私有仓库。
       contents: read
@@ -58,6 +58,18 @@ jobs:
 
       - name: Publish package distributions to PyPI
         run: pdm publish || true
+
+  pypi-publish-verify:
+    name: verify release of PyPI
+    runs-on: ubuntu-latest
+    needs: pypi-publish
+    permissions:
+      contents: read
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.x'
 
       - name: pip install toml
         run: pip install toml
