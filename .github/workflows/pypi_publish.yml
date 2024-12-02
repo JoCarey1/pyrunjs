@@ -88,3 +88,4 @@ jobs:
         run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
       - name: Verify PyPI upload
         run: pip install pyrunjs==$VERSION
+
