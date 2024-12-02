@@ -2,6 +2,12 @@
 
 使用python简单地调用js，获取js表达式返回值
 
+note: 系统需要安装node.js，`node`命令可用，尝试用`node -v`查询node版本:
+```bash
+$ node -v 
+v18.20.5
+```
+
 # 安装
 
 pdm
