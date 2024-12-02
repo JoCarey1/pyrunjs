@@ -39,6 +39,23 @@ result = pyrunjs.run_js('', "1 + 2")
 print(result)  # output: 3
 ```
 
+```python
+import pyrunjs
+
+js_script = """
+    function add(a, b) {
+        return new Promise((resolve, reject) => {
+            let sum = a + b;
+            resolve(sum);
+        }).then(sum => {
+            return sum * sum;
+        });
+    }
+"""
+result = pyrunjs.run_js(js_script, "add(1, 2)")
+print(result) # output: 9
+```
+
 # 版本更新概要信息
 
 * 0.1.2 `run_js`函数可用

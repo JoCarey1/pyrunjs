@@ -73,7 +73,6 @@ def run_js_with_result(js_script: str, expression: str):
         result.output = base64.b64decode(g.group(2)).decode('utf-8')
     else:
         result.error = err.decode()
-        print(result.error)
     return result
 
 
