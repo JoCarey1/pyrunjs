@@ -18,22 +18,25 @@ jobs:
   # 运行单元测试的 Job
   uni-test:
     name: Run Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11', '3.12', '3.13']
+        os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: pdm-project/setup-pdm@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@v4
         with:
-          python-version: '3.12.x'
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: pdm install  # 使用 PDM 安装依赖
-
-      - name: Run unit tests
-        run: pdm run -v pytest tests
+        run: |
+          pdm sync -d -G testing
+      - name: Run Tests
+        run: |
+          pdm run -v pytest tests
 
   # This workflow contains a single job called "build"
   pypi-publish:
@@ -54,7 +57,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.x'
+          python-version: '3.8.x'
 
       - name: Publish package distributions to PyPI
         run: pdm publish || true
@@ -71,7 +74,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.x'
+          python-version: '3.8.x'
 
       - name: pip install toml
         run: pip install toml
