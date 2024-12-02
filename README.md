@@ -1,5 +1,7 @@
 # pyrunjs
 
+使用python简单地调用js，获取js表达式返回值
+
 # 安装
 
 pdm
@@ -30,3 +32,8 @@ import pyrunjs
 result = pyrunjs.run_js('', "1 + 2")
 print(result)  # output: 3
 ```
+
+# 版本更新概要信息
+
+* 0.1.2 `run_js`函数可用
+* 0.1.3 新增`call_js`函数，可自动编写调用function的表达式。解决不同系统默认编码不同导致的乱码问题。
