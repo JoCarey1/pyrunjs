@@ -36,11 +36,34 @@ jobs:
         run: |
           pdm run -v pytest tests
 
+  uni-test-py313:
+    name: Run Unit Tests For python3.13
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ['3.13']
+        os: [ ubuntu-latest, macOS-latest, windows-latest ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pdm sync -d -G testing
+      - name: Run Tests
+        run: |
+          pdm run -v pytest tests
   # This workflow contains a single job called "build"
   pypi-publish:
     name: upload release to PyPI
     runs-on: ubuntu-latest
-    needs: uni-test
+    needs:
+      - uni-test
+      - uni-test-py313
     permissions:
       # 这个权限是为了私有仓库。
       contents: read

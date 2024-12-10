@@ -39,7 +39,7 @@ jobs:
           pdm run -v pytest tests
 
   uni-test-py313:
-    name: Run Unit Tests
+    name: Run Unit Tests For python3.13
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
