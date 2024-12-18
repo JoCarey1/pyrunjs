@@ -9,6 +9,10 @@ class TestCallJs(unittest.TestCase):
         js_script = """function HelloWorld() { return 'Hello World!'; } """
         self.assertEqual("Hello World!", pyrunjs.call_js(js_script, "HelloWorld"))
 
+    def test_hello_world_chinese(self):
+        js_script = """function 你好世界() { return '你好世界'; } """
+        self.assertEqual("你好世界", pyrunjs.call_js(js_script, "你好世界"))
+
     def test_string_param(self):
         js_script = """function add(a) { return a; } """
         self.assertEqual("my msg.", pyrunjs.call_js(js_script, "add", "my msg."))
