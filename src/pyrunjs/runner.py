@@ -38,6 +38,7 @@ def run_js_with_result(js_script: str, expression: str):
     if js_script is None or expression is None:
         raise ValueError('js_script and expression are required')
     js_script = base64.b64encode(js_script.encode('utf-8')).decode('utf-8')
+    expression = base64.b64encode(expression.encode('utf-8')).decode('utf-8')
     js_code = f'''
         (function() {{
             eval(Buffer.from("{js_script}", "base64").toString("UTF-8"));
@@ -51,7 +52,7 @@ def run_js_with_result(js_script: str, expression: str):
                     let result_type_base64 = Buffer.from(result_type, "UTF-8").toString("base64");
                     process.stdout.write(`##${{result_type_base64}}##${{result_base64}}##`);
                 }}
-                let expression_result = {expression};
+                let expression_result = eval(Buffer.from("{expression}", "base64").toString("UTF-8"));
                 if (expression_result && typeof expression_result.then === 'function') {{
                     expression_result.then(obj => {{_handle_result(obj)}});
                 }} else {{
