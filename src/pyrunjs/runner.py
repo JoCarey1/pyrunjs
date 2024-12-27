@@ -89,8 +89,8 @@ def make_call_expression(call_func_name, call_func_params):
         if isinstance(call_func_params, (list, tuple)):
             _call_func_params_is_list_or_tuple = True
             for param in call_func_params:
-                if not isinstance(param, (str, int, dict)) and param is not None:
-                    raise RuntimeError(f"call_func_params every param must be (str, int, dict) or None")
+                if not isinstance(param, (str, int, dict, list, tuple)) and param is not None:
+                    raise RuntimeError(f"call_func_params every param must be (str, int, dict, list, tuple) or None")
         elif call_func_params is not None:
             raise RuntimeError(f"call_func_params must be (str, int, dict) or None")
     if _call_func_params_is_list_or_tuple:
